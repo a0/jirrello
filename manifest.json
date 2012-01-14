@@ -1,0 +1,15 @@
+{
+	"name": "JIRRELLO",
+	"version": "0.1",
+	"description": "Jira from trello integration",
+	"browser_action": {
+    	"default_icon": "icon.png"
+  	},
+	"content_scripts": [
+		{
+			"matches": ["https://trello.com/*"],
+			"js": ["jquery-1.6.3.min.js","jirrello.js"],
+			"css": ["jirrello.css"]
+		}
+	]
+}
