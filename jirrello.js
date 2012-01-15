@@ -1,8 +1,4 @@
-
-
-
 $(function(){
-	//want: trello events
 	(function periodical(){
 		//console.log('---------------------------------');
 		procBoardTitle();
@@ -11,8 +7,6 @@ $(function(){
 	})()
 });
 
-
-//.board-title
 function procBoardTitle(e){
 	var d=$('div.board-title');
 
@@ -22,17 +16,17 @@ function procBoardTitle(e){
 
 	if (p) {
 		//console.log(p[1]);
-		var oldText = d.find('h4.jira-project').text();
+		var oldText = d.find('span.jira-project').text();
 		if (oldText) {
 			if (p[1]!=oldText) {
 				var v = d.find('a.js-board-title').html();
 				d.find('a.js-board-title').html(v.replace(r,''));
-				d.find('h4.jira-project').html(p[1]);
+				d.find('span.jira-project').html(p[1]);
 			}
 		} else {
 			var v = d.find('a.js-board-title').html();
 			d.find('a.js-board-title').html(v.replace(r,''));
-			d.append('<h4 class="jira-project">' + p[1] + '</h4>');
+			d.append('<span class="jira-project">' + p[1] + '</span>');
 		}
 	}
 }
@@ -44,15 +38,15 @@ function procListCard(e){
 
 	if (p) {
 		//console.log(p[1]);
-		var oldText = $(this).find('h4.jira-issue').text();
+		var oldText = $(this).find('span.jira-issue').text();
 		if (oldText) {
 			if (p[1]!=oldText) {
-				$(this).find('h4.jira-issue').html(p[1]);
+				$(this).find('span.jira-issue').html(p[1]);
 			}
 		} else {
 			var v = $(this).find('h3.list-card-title').find('a').html();
 			$(this).find('h3.list-card-title').find('a').html(v.replace(r,''));
-			$('<h4 class="jira-issue">' + p[1] + '</h4>').prependTo($(this).find('.badges'));
+			$('<span class="jira-issue">' + p[1] + '</span>').prependTo($(this).find('.badges'));
 		}
 	};
 }
