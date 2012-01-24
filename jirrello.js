@@ -1,90 +1,102 @@
+var options
+var jiraKey = 'N-O-K-E-Y'
+chrome.extension.sendRequest({cmd: "getData"}, function(response) {
+    options = response
+})
+
 $(function(){
-	$(".window").live('DOMNodeInserted', function(event) {
-		if (true) {
-			console.log(
-				'\n\n\ninserted \n\n' + 
-				domPath(event.target) + 
-				' \n\ninto\n\n' + 
-				domPath(event.relatedNode)  + 
-				' \n\n-------------------------------------------------------------------\n\n' + 
-				event.target.innerHTML + 
-				' \n\n-------------------------------------------------------------------\n\n'
-			);
-		};
-
-
-		var t=$(".window-title-text").text();
-		var r=/\((.*?)\)/m;
-		if (t.match(r)) {
-			return;
-		}
-
-		t=event.target.innerHTML;
-		r=/card-label-list/m;
-		if (t.match(r)) {
-			$('<div class="window-module"><a class="button-link">Create jira issue</a></div>').prependTo($('.window-sidebar'));
-		}
-	});
-
 	(function periodical(){
-		//console.log('---------------------------------');
-		procBoardTitle();
-		$('.list-card').each(procListCard);
+		procBoardTitle()
+		$('.list-card').each(procListCard)
 		setTimeout(periodical,1000)
 	})()
-
-});
-
-// snippeted from: http://stackoverflow.com/questions/1484875/i-need-the-full-dom-node-path-of-element
-function domPath(el) {
-	var path = [];
-	do {
-	    path.unshift(el.nodeName + (el.className ? ' class="' + el.className + '"' : ''));
-	} while ((el.nodeName.toLowerCase() != 'html') && (el = el.parentNode));
-	return path.join(" > ");	
-}
+	$(".window").live('DOMNodeInserted',changeWindow)
+})
 
 function procBoardTitle(e){
-	var d=$('div.board-title');
+	var div=$('div.board-title')
+	var target=div.find('a.js-board-title').text()
+	var regex=/\((jira:.*?)\)/m
+	var partTitle=target.match(regex)
 
-	var t=d.find('a.js-board-title').text();
-	var r=/\((.*?)\)/m;
-	var p=t.match(r);
+	if (div.find('span.jira-project').length == 0) 
+		jiraKey = "N-O-K-E-Y"
 
-	if (p) {
-		//console.log(p[1]);
-		var oldText = d.find('span.jira-project').text();
+	if (partTitle && options) {
+		jiraKey = (partTitle[1].split(":"))[1]
+		div.find('a.js-board-title').html(div.find('a.js-board-title').html().replace(regex,''))
+		var oldText = div.find('span.jira-project').text()
 		if (oldText) {
-			if (p[1]!=oldText) {
-				var v = d.find('a.js-board-title').html();
-				d.find('a.js-board-title').html(v.replace(r,''));
-				d.find('span.jira-project').html(p[1]);
-			}
+			div.find('span.jira-project').html(jiraKey)
 		} else {
-			var v = d.find('a.js-board-title').html();
-			d.find('a.js-board-title').html(v.replace(r,''));
-			d.append('<span class="jira-project">' + p[1] + '</span>');
+			div.append('<span class="jira-project button">' + jiraKey + '</span>')
+			$('.jira-project').click(function(){
+				window.open(options.jiraBaseUrl+'/browse/'+jiraKey)
+			})
 		}
 	}
 }
 
 function procListCard(e){
-	var t=$(this).find('h3.list-card-title').find('a').text();
-	var r=/\((.*?)\)/m;
-	var p=t.match(r);
-
-	if (p) {
-		//console.log(p[1]);
-		var oldText = $(this).find('span.jira-issue').text();
+	if (jiraKey == 'N-O-K-E-Y') 
+		return
+	var title = $(this).find('h3.list-card-title').find('a').text()
+	var regex = new RegExp("\\((" + jiraKey + ".*?)\\)","m")
+	var partTitle = title.match(regex)
+	if (partTitle) {
+		var oldText = $(this).find('span.jira-issue').text()
+		var jiraIssue = partTitle[1]
 		if (oldText) {
-			if (p[1]!=oldText) {
-				$(this).find('span.jira-issue').html(p[1]);
-			}
+			if (jiraIssue=oldText) 
+				$(this).find('span.jira-issue').html(jiraIssue)
 		} else {
-			var v = $(this).find('h3.list-card-title').find('a').html();
-			$(this).find('h3.list-card-title').find('a').html(v.replace(r,''));
-			$('<span class="jira-issue">' + p[1] + '</span>').prependTo($(this).find('.badges'));
+			$(this).find('h3.list-card-title').find('a').
+				html(
+					$(this).find('h3.list-card-title').
+					find('a').html().
+					replace(regex,'<span class="jira-issue">' + jiraIssue + '</span>')
+				)
 		}
-	};
+	}
 }
+
+function changeWindow(event) {
+	if (jiraKey == 'N-O-K-E-Y') 
+		return
+	var jiraBaseUrl=options.jiraBaseUrl
+	var jiraIssueType = "3"
+	var jiraLinkUrl = jiraBaseUrl + "/browse/"
+	var jiraCreateUrl = jiraBaseUrl + "/secure/CreateIssueDetails!init.jspa"
+
+	var target=event.target.innerHTML
+	var regex=/card-label-list/m
+	if (target.match(regex)) {
+		var title=$(".window-title-text").text()
+		var regexTitle = new RegExp("\\((" + jiraKey + ".*?)\\)","m")
+		var partTitle=title.match(regexTitle)
+		if (partTitle) {
+			var issue=partTitle[1]
+			$('<div class="window-module"><a class="button-link jira-link">jira:' + issue + '</a></div>').prependTo($('.window-sidebar'))
+			$('.jira-link').click(function(){window.open(jiraLinkUrl+issue)})
+		} else {
+			var jiraPid
+			var jiraUser
+			chrome.extension.sendRequest({cmd: "getPidAndUserFromKey", options: options, jiraKey: jiraKey}, function(response) {
+				jiraPid = response.pid
+				jiraUser = response.user
+				$('.jira-create').show()
+			})
+			$('<div class="window-module jira-create hide"><a class="button-link">Create jira issue</a></div>').prependTo($('.window-sidebar'))
+			$('.jira-create').click(function(){
+				window.open(jiraCreateUrl + "?"
+					+ "pid=" + jiraPid + "&"
+					+ "issuetype=" + jiraIssueType + "&"
+					+ "reporter=" + jiraUser + "&"
+					+ "summary=" + encodeURI(title) + "&"
+					+ "description=" + encodeURI($(location).attr('href'))
+				)
+			})
+		}
+	}
+}		
 

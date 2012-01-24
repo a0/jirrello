@@ -1,20 +1,17 @@
 .jira-issue {
     background-color: #28739F !important;
-    border-radius: 3px;
-    border: 1px solid #183270;
+    border-radius: 3px !important;
+    border: 1px solid #183270 !important;
     padding: 1px 5px !important;
     font-size: 10px !important;
-    color: white;
-    font-weight: bold;
+    color: white !important;
+    font-weight: bold !important;
 }
 
 .jira-project {
-    background-color: #C33 !important;
-    border-radius: 5px;
-    border: 1px solid #A32929;
-    padding: 2px 5px !important;
+    border-radius: 5px !important;
     font-size: 15px !important;
-    color: white;
-    font-weight: bold;
+    font-weight: bold !important;
+    padding: 0px 5px !important;
+    margin-top: 0px !important;
 }
-
