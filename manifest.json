@@ -9,10 +9,9 @@
       "matches": [ "https://trello.com/*" ]
    } ],
    "description": "Jira from trello integration",
-   "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCopOUU9zbJLRGVirAyF2GIbDXJy9i1khVwkiB0AiuOmhLMc5F2WyITTfV2hI4FJ1DR8D03x1qwnpgLkVDAslvqHNRGqEYADVldcdvPqFVnE68Jrp7WQpqW2r5+D6RH4WzZBfB007JHNt445qnf0WgldcA/KPuxhdwwSXrVo9JiIQIDAQAB",
+   "icons": { "16": "icon16.png", "48": "icon48.png", "128": "icon128.png" },
    "name": "JIRRELLO",
    "options_page": "options.html",
    "permissions": [ "http://*/*", "https://*/*" ],
-   "update_url": "http://clients2.google.com/service/update2/crx",
-   "version": "0.1"
+   "version": "0.2"
 }

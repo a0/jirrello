@@ -40,7 +40,7 @@ function procBoardTitle(e){
 function procListCard(e){
 	if (jiraKey == 'N-O-K-E-Y') 
 		return
-	var title = $(this).find('h3.list-card-title').find('a').text()
+	var title = $(this).find('a.list-card-title').text()
 	var regex = new RegExp("\\((" + jiraKey + ".*?)\\)","m")
 	var partTitle = title.match(regex)
 	if (partTitle) {
@@ -50,10 +50,9 @@ function procListCard(e){
 			if (jiraIssue=oldText) 
 				$(this).find('span.jira-issue').html(jiraIssue)
 		} else {
-			$(this).find('h3.list-card-title').find('a').
+			$(this).find('a.list-card-title').
 				html(
-					$(this).find('h3.list-card-title').
-					find('a').html().
+					$(this).find('a.list-card-title').html().
 					replace(regex,'<span class="jira-issue">' + jiraIssue + '</span>')
 				)
 		}
