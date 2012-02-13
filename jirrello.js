@@ -15,7 +15,7 @@ $(function(){
 
 function procBoardTitle(e){
 	var div=$('div.board-title')
-	var target=div.find('a.js-board-title').text()
+	var target=div.find('a.js-open-board-menu-title').text()
 	var regex=/\((jira:.*?)\)/m
 	var partTitle=target.match(regex)
 
@@ -24,7 +24,7 @@ function procBoardTitle(e){
 
 	if (partTitle && options) {
 		jiraKey = (partTitle[1].split(":"))[1]
-		div.find('a.js-board-title').html(div.find('a.js-board-title').html().replace(regex,''))
+		div.find('a.js-open-board-menu-title').html(div.find('a.js-open-board-menu-title').html().replace(regex,''))
 		var oldText = div.find('span.jira-project').text()
 		if (oldText) {
 			div.find('span.jira-project').html(jiraKey)
