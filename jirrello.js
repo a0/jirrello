@@ -14,7 +14,7 @@ $(function(){
 })
 
 function procBoardTitle(e){
-	var div=$('div.board-title')
+	var div=$('#div#board-header')
 	var target=div.find('a.js-open-board-menu-title').text()
 	var regex=/\((jira:.*?)\)/m
 	var partTitle=target.match(regex)
