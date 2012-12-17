@@ -13,5 +13,5 @@
    "name": "JIRRELLO",
    "options_page": "options.html",
    "permissions": [ "http://*/*", "https://*/*" ],
-   "version": "0.3"
+   "version": "0.4"
 }
