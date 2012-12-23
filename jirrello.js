@@ -14,7 +14,7 @@ $(function(){
 })
 
 function procBoardTitle(e){
-	var div=$('#div#board-header')
+	var div=$('div#board-header')
 	var target=div.find('a.js-open-board-menu-title').text()
 	var regex=/\((jira:.*?)\)/m
 	var partTitle=target.match(regex)
@@ -40,8 +40,13 @@ function procBoardTitle(e){
 function procListCard(e){
 	if (jiraKey == 'N-O-K-E-Y') 
 		return
+		
+	
+	var jiraBaseUrl=options.jiraBaseUrl
+	var jiraLinkUrl = jiraBaseUrl + "/browse/"
+	
 	var title = $(this).find('a.list-card-title').text()
-	var regex = new RegExp("\\((" + jiraKey + ".*?)\\)","m")
+	var regex = new RegExp("\\((\\w+-\\d+?)\\)","im")
 	var partTitle = title.match(regex)
 	if (partTitle) {
 		var oldText = $(this).find('span.jira-issue').text()
@@ -53,8 +58,9 @@ function procListCard(e){
 			$(this).find('a.list-card-title').
 				html(
 					$(this).find('a.list-card-title').html().
-					replace(regex,'<span class="jira-issue">' + jiraIssue + '</span>')
+					replace(regex,'<span class="jira-issue">' + jiraIssue.toUpperCase() + '</span>')
 				)
+			$(this).find('.jira-issue').click(function( event ){window.open(jiraLinkUrl+jiraIssue); return false; });
 		}
 	}
 }
@@ -71,11 +77,11 @@ function changeWindow(event) {
 	var regex=/card-label-list/m
 	if (target.match(regex)) {
 		var title=$(".window-title-text").text()
-		var regexTitle = new RegExp("\\((" + jiraKey + ".*?)\\)","m")
+		var regexTitle = new RegExp("\\((\\w+-\\d+?)\\)","m")
 		var partTitle=title.match(regexTitle)
 		if (partTitle) {
 			var issue=partTitle[1]
-			$('<div class="window-module"><a class="button-link jira-link">jira:' + issue + '</a></div>').prependTo($('.window-sidebar'))
+			$('<div class="window-module"><a class="button-link jira-link">jira:' + issue.toUpperCase() + '</a></div>').prependTo($('.window-sidebar'))
 			$('.jira-link').click(function(){window.open(jiraLinkUrl+issue)})
 		} else {
 			var jiraPid
@@ -98,4 +104,3 @@ function changeWindow(event) {
 		}
 	}
 }		
-
