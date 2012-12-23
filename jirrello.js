@@ -14,7 +14,7 @@ $(function(){
 })
 
 function procBoardTitle(e){
-	var div=$('#div#board-header')
+	var div=$('div#board-header')
 	var target=div.find('a.js-open-board-menu-title').text()
 	var regex=/\((jira:.*?)\)/m
 	var partTitle=target.match(regex)
@@ -41,7 +41,7 @@ function procListCard(e){
 	if (jiraKey == 'N-O-K-E-Y') 
 		return
 	var title = $(this).find('a.list-card-title').text()
-	var regex = new RegExp("\\((" + jiraKey + ".*?)\\)","m")
+	var regex = new RegExp("\\((\\w+-\\d+?)\\)","im")
 	var partTitle = title.match(regex)
 	if (partTitle) {
 		var oldText = $(this).find('span.jira-issue').text()
@@ -71,7 +71,7 @@ function changeWindow(event) {
 	var regex=/card-label-list/m
 	if (target.match(regex)) {
 		var title=$(".window-title-text").text()
-		var regexTitle = new RegExp("\\((" + jiraKey + ".*?)\\)","m")
+		var regexTitle = new RegExp("\\((\\w+-\\d+?)\\)","m")
 		var partTitle=title.match(regexTitle)
 		if (partTitle) {
 			var issue=partTitle[1]
