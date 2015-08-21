@@ -1,11 +1,16 @@
 {
-   "background_page": "background.html",
+   "manifest_version": 2,
+   "background": {
+    "scripts": [ "jquery-2.1.4.min.js", "background.js" ],
+	 "persistent": false
+  },
+   
    "browser_action": {
       "default_icon": "icon.png"
    },
    "content_scripts": [ {
       "css": [ "jirrello.css" ],
-      "js": [ "jquery-1.7.1.min.js", "jirrello.js" ],
+      "js": [ "jquery-2.1.4.min.js", "jirrello.js" ],
       "matches": [ "https://trello.com/*" ]
    } ],
    "description": "Jira from trello integration",
@@ -13,5 +18,5 @@
    "name": "JIRRELLO",
    "options_page": "options.html",
    "permissions": [ "http://*/*", "https://*/*" ],
-   "version": "0.4"
+   "version": "0.6"
 }

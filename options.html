@@ -3,18 +3,7 @@
 <head>
 	<title>JIRA Chrome Extension Options</title>
 	<script type="text/javascript" src="jquery-1.7.1.min.js"></script>
-	<script type="text/javascript">
-		function init(){
-			var bg = chrome.extension.getBackgroundPage();
-			$("#jiraBaseUrl").val(bg.getJiraBaseUrl())
-			$('#jiraBaseUrl').live("keypress", function(e) {if (e.keyCode == 13) {save()}})
-			$('#note').click(function(e){$("#jiraBaseUrl").val("https://jira.atlassian.com")})
-		}
-		function save(){
-			var bg = chrome.extension.getBackgroundPage();
-			bg.saveOptions($("#jiraBaseUrl").val())
-		}
-	</script>
+	
 	<style type="text/css">
 		body, input {
 			line-height: 1;
@@ -52,16 +41,17 @@
 	</style>
 </head>
 
-<body onload="init()">
+<body>
 <center>
-	<h1>JIRA URL</h1>
-	<input id="jiraBaseUrl" type="text" size="60" />
-	<input type="button" onclick="save()" value="Save" /> <br /><br />
+	<h1>JIRA TRELLO options</h1>
+	URL: <input id="jiraBaseUrl" type="text" size="60" /> <br/>
+	<input id="save" type="button" value="Save" /> <br /><br />
 
 	<div id="note">
 	As an example for practice, you can use the project TST in atlassian jira https://jira.atlassian.com
+	Note: If you use https and you do not have a certificate which your browser accepts, This extension will not work unless it is on http
 	</div>
 </center>
 </body>
-
+<script type="text/javascript" src="options.js"></script>
 </html>
